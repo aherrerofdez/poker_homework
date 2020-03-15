@@ -192,16 +192,8 @@ class Hand(object):
 
 
 simulations = 0
-royal_flush = 0
-straight_flush = 0
-four_of_kind = 0
-full_house = 0
-flush = 0
-straight = 0
-three_of_kind = 0
-two_pair = 0
-pair = 0
-high_card = 0
+hands_dict = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0, "Straight": 0,
+              "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
 
 while simulations < 10000:
     new_deck = Deck()
@@ -209,37 +201,42 @@ while simulations < 10000:
     new_hand = Hand(new_deck)
 
     if new_hand.is_royal_flush():
-        royal_flush += 1
+        hands_dict["Royal Flush"] += 1
     if new_hand.is_straight_flush():
-        straight_flush += 1
+        hands_dict["Straight Flush"] += 1
     if new_hand.is_four_of_kind():
-        four_of_kind += 1
+        hands_dict["Four of a Kind"] += 1
     if new_hand.is_full_house():
-        full_house += 1
+        hands_dict["Full House"] += 1
     if new_hand.is_flush():
-        flush += 1
+        hands_dict["Flush"] += 1
     if new_hand.is_straight():
-        straight += 1
+        hands_dict["Straight"] += 1
     if new_hand.is_three_of_kind():
-        three_of_kind += 1
+        hands_dict["Three of a Kind"] += 1
     if new_hand.is_two_pair():
-        two_pair += 1
+        hands_dict["Two Pair"] += 1
     if new_hand.is_pair():
-        pair += 1
+        hands_dict["Pair"] += 1
     if new_hand.is_high_card():
-        high_card += 1
+        hands_dict["High Card"] += 1
     simulations += 1
 
-total = royal_flush + straight_flush + four_of_kind + full_house + flush + straight + three_of_kind + two_pair + pair + high_card
+total_hands = 0
+for value in hands_dict.values():
+    total_hands += value
 
-print("Royal Flush:", royal_flush, "-> Probability of appearance in 10K hands:", round((royal_flush/total)*100, 2), "%")
-print("Straight Flush:", straight_flush, "-> Probability of appearance in 10K hands:", round((straight_flush/total)*100, 2), "%")
-print("Four of a Kind:", four_of_kind, "-> Probability of appearance in 10K hands:", round((four_of_kind/total)*100, 2), "%")
-print("Full House:", full_house, "-> Probability of appearance in 10K hands:", round((full_house/total)*100, 2), "%")
-print("Flush:", flush, "-> Probability of appearance in 10K hands:", round((flush/total)*100, 2), "%")
-print("Straight:", straight, "-> Probability of appearance in 10K hands:", round((straight/total)*100, 2), "%")
-print("Three of a Kind:", three_of_kind, "-> Probability of appearance in 10K hands:", round((three_of_kind/total)*100, 2), "%")
-print("Two Pair:", two_pair, "-> Probability of appearance in 10K hands:", round((two_pair/total)*100, 2), "%")
-print("Pair:", pair, "-> Probability of appearance in 10K hands:", round((pair/total)*100, 2), "%")
-print("High Card:", high_card, "-> Probability of appearance in 10K hands:", round((high_card/total)*100, 2), "%")
-print("Total of hands:", total)
+probabilities = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0, "Straight": 0,
+                 "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
+for h in hands_dict:
+    probabilities[h] = round((hands_dict[h]/total_hands)*100, 2)
+
+max_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(max(probabilities.values()))]
+min_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(min(probabilities.values()))]
+
+print("Total of hands:", total_hands)
+for h in hands_dict:
+    print(h + ": " + str(hands_dict[h]) + " -> Probability of appearance in 10K hands: " + str(probabilities[h]) + "%")
+
+print("The hand that appeared the most is:", max_prob_hand)
+print("The hand that appeared the least is:", min_prob_hand)

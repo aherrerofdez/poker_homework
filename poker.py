@@ -203,7 +203,7 @@ two_pair = 0
 pair = 0
 high_card = 0
 
-while simulations < 1000000:
+while simulations < 10000:
     new_deck = Deck()
     new_deck.shuffle()
     new_hand = Hand(new_deck)
@@ -230,16 +230,16 @@ while simulations < 1000000:
         high_card += 1
     simulations += 1
 
+total = royal_flush + straight_flush + four_of_kind + full_house + flush + straight + three_of_kind + two_pair + pair + high_card
 
-print(royal_flush)
-print(straight_flush)
-print(four_of_kind)
-print(full_house)
-print(flush)
-print(straight)
-print(three_of_kind)
-print(two_pair)
-print(pair)
-print(high_card)
-print(royal_flush + straight_flush + four_of_kind + full_house + flush + straight + three_of_kind +
-      two_pair + pair + high_card)
+print("Royal Flush:", royal_flush, "-> Probability of appearance in 10K hands:", round((royal_flush/total)*100, 2), "%")
+print("Straight Flush:", straight_flush, "-> Probability of appearance in 10K hands:", round((straight_flush/total)*100, 2), "%")
+print("Four of a Kind:", four_of_kind, "-> Probability of appearance in 10K hands:", round((four_of_kind/total)*100, 2), "%")
+print("Full House:", full_house, "-> Probability of appearance in 10K hands:", round((full_house/total)*100, 2), "%")
+print("Flush:", flush, "-> Probability of appearance in 10K hands:", round((flush/total)*100, 2), "%")
+print("Straight:", straight, "-> Probability of appearance in 10K hands:", round((straight/total)*100, 2), "%")
+print("Three of a Kind:", three_of_kind, "-> Probability of appearance in 10K hands:", round((three_of_kind/total)*100, 2), "%")
+print("Two Pair:", two_pair, "-> Probability of appearance in 10K hands:", round((two_pair/total)*100, 2), "%")
+print("Pair:", pair, "-> Probability of appearance in 10K hands:", round((pair/total)*100, 2), "%")
+print("High Card:", high_card, "-> Probability of appearance in 10K hands:", round((high_card/total)*100, 2), "%")
+print("Total of hands:", total)

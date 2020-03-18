@@ -2,7 +2,7 @@ import random
 from tkinter import *
 from PIL import ImageTk, Image  # used to load a JPG file
 
-suits = ["S", "H", "D", "C"]  
+suits = ["S", "H", "D", "C"]
 ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 
@@ -333,7 +333,7 @@ class GUI:
             new_deck.shuffle()
             hand = Hand(new_deck)
 
-            if hand.is_straight() or hand.is_flush():
+            if hand.is_royal_flush() or hand.is_straight_flush():
                 hand.print_canvas(self.canvas)
                 break
         self.label.config(text=hand.rank_hand())

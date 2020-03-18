@@ -1,5 +1,8 @@
 import random
-suits = ["♠", "♥", "♦", "♣"]
+from tkinter import *
+from PIL import ImageTk, Image  # used to load a JPG file
+
+suits = ["S", "H", "D", "C"]
 ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 
@@ -190,53 +193,157 @@ class Hand(object):
             return True
         return False
 
+    def print_canvas(self, canvas):
+        size = 175, 500
+        for i in range(5):
+            card_name = self.cards[i].get_rank() + self.cards[i].get_suit() + ".png"
+            im = Image.open("PNG/" + card_name)
+            im.thumbnail(size)
+            canvas[i].image = ImageTk.PhotoImage(im)
+            canvas[i].create_image(20, 50, image=canvas[i].image, anchor='nw')
 
-simulations = 0
-hands_dict = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0, "Straight": 0,
-              "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
+    def rank_hand(self):
+        output = "This is a {} hand"
+        if self.is_royal_flush():
+            return output.format("Royal Flush")
+        if self.is_straight_flush():
+            return output.format("Straight Flush")
+        if self.is_four_of_kind():
+            return output.format("Four of a Kind")
+        if self.is_full_house():
+            return output.format("Full House")
+        if self.is_flush():
+            return output.format("Flush")
+        if self.is_straight():
+            return output.format("Straight")
+        if self.is_three_of_kind():
+            return output.format("Three of a Kind")
+        if self.is_two_pair():
+            return output.format("Two Pair")
+        if self.is_pair():
+            return output.format("Pair")
+        return output.format("High Card")
 
-while simulations < 10000:
-    new_deck = Deck()
-    new_deck.shuffle()
-    new_hand = Hand(new_deck)
 
-    if new_hand.is_royal_flush():
-        hands_dict["Royal Flush"] += 1
-    if new_hand.is_straight_flush():
-        hands_dict["Straight Flush"] += 1
-    if new_hand.is_four_of_kind():
-        hands_dict["Four of a Kind"] += 1
-    if new_hand.is_full_house():
-        hands_dict["Full House"] += 1
-    if new_hand.is_flush():
-        hands_dict["Flush"] += 1
-    if new_hand.is_straight():
-        hands_dict["Straight"] += 1
-    if new_hand.is_three_of_kind():
-        hands_dict["Three of a Kind"] += 1
-    if new_hand.is_two_pair():
-        hands_dict["Two Pair"] += 1
-    if new_hand.is_pair():
-        hands_dict["Pair"] += 1
-    if new_hand.is_high_card():
-        hands_dict["High Card"] += 1
-    simulations += 1
+stats_on = False
+if stats_on:
+    simulations = 0
+    hands_dict = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0,
+                  "Straight": 0, "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
 
-total_hands = 0
-for value in hands_dict.values():
-    total_hands += value
+    while simulations < 10000:
+        new_deck = Deck()
+        new_deck.shuffle()
+        new_hand = Hand(new_deck)
 
-probabilities = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0, "Straight": 0,
-                 "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
-for h in hands_dict:
-    probabilities[h] = round((hands_dict[h]/total_hands)*100, 2)
+        if new_hand.is_royal_flush():
+            hands_dict["Royal Flush"] += 1
+        if new_hand.is_straight_flush():
+            hands_dict["Straight Flush"] += 1
+        if new_hand.is_four_of_kind():
+            hands_dict["Four of a Kind"] += 1
+        if new_hand.is_full_house():
+            hands_dict["Full House"] += 1
+        if new_hand.is_flush():
+            hands_dict["Flush"] += 1
+        if new_hand.is_straight():
+            hands_dict["Straight"] += 1
+        if new_hand.is_three_of_kind():
+            hands_dict["Three of a Kind"] += 1
+        if new_hand.is_two_pair():
+            hands_dict["Two Pair"] += 1
+        if new_hand.is_pair():
+            hands_dict["Pair"] += 1
+        if new_hand.is_high_card():
+            hands_dict["High Card"] += 1
+        simulations += 1
 
-max_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(max(probabilities.values()))]
-min_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(min(probabilities.values()))]
+    total_hands = 0
+    for value in hands_dict.values():
+        total_hands += value
 
-print("Total of hands:", total_hands)
-for h in hands_dict:
-    print(h + ": " + str(hands_dict[h]) + " -> Probability of appearance in 10K hands: " + str(probabilities[h]) + "%")
+    probabilities = {"Royal Flush": 0, "Straight Flush": 0, "Four of a Kind": 0, "Full House": 0, "Flush": 0,
+                     "Straight": 0, "Three of a Kind": 0, "Two Pair": 0, "Pair": 0, "High Card": 0}
+    for h in hands_dict:
+        probabilities[h] = round((hands_dict[h]/total_hands)*100, 2)
 
-print("The hand that appeared the most is:", max_prob_hand)
-print("The hand that appeared the least is:", min_prob_hand)
+    max_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(max(probabilities.values()))]
+    min_prob_hand = list(probabilities.keys())[list(probabilities.values()).index(min(probabilities.values()))]
+
+    print("Total of hands:", total_hands)
+    for h in hands_dict:
+        print(h + ": " + str(hands_dict[h]) + " -> Probability of appearance in 10K hands: " +
+              str(probabilities[h]) + "%")
+
+    print("The hand that appeared the most is:", max_prob_hand)
+    print("The hand that appeared the least is:", min_prob_hand)
+
+
+class GUI:
+    def __init__(self, w):
+        self.window = w
+        bg_color = "#00338D"
+        title = "This program will deal 5 cards and tell you what hand you have got"
+
+        # Adding Title and Size
+        self.window.title("Poker Game")
+        self.window.geometry("1275x600")
+        self.window.resizable(0, 0)
+
+        # Creating a Frame
+        self.frame = Frame(master=window, bg=bg_color)
+        self.frame.pack_propagate(0)  # Do not allow widgets inside to determine the frame's dimensions
+        self.frame.pack(fill=BOTH, expand=1)  # Expand the frame to fill the root window
+
+        # Create a Canvas
+        self.cards_frame = Frame(master=self.frame)
+        self.canvas = []
+        for i in range(5):
+            self.canvas.append(Canvas(master=self.cards_frame, width=215, height=375, bg="#7AA52B", highlightthickness=0))
+            self.canvas[i].grid(row=0, column=i)
+        self.cards_frame.grid(row=1, rowspan=3, padx=20)
+
+        self.label = Label(self.frame, text="", bg=bg_color, fg="white")
+        self.label.grid(row=5)
+        self.label.config(font=("Segoe UI", 44))
+        label2 = Label(self.frame, text=title, bg=bg_color, fg="white")
+        label2.grid(row=0, columnspan=2, pady=20)
+        label2.config(font=("Segoe UI", 20))
+
+        self.bt1 = Button(self.frame, text="Play", command=self.deal, bg="#7AA52B", fg="white")
+        self.bt1.config(font=("Segoe UI", 15))
+        self.bt1.grid(row=2, column=1, columnspan=2)
+        self.bt3 = Button(self.frame, text="Get Premium", command=self.get_premium)
+        self.bt3.config(font=("Segoe UI", 15))
+        self.bt3.grid(row=1, column=1, columnspan=2)
+        self.bt2 = Button(self.frame, text="Exit Game", command=self.exit_game, bg="black", fg="yellow")
+        self.bt2.config(font=("Segoe UI", 15))
+        self.bt2.grid(row=3, column=2)
+
+    def deal(self):
+        new_deck = Deck()
+        new_deck.shuffle()
+        hand = Hand(new_deck)
+        hand.print_canvas(self.canvas)
+        self.label.config(text=hand.rank_hand())
+
+    def get_premium(self):
+        while True:
+            new_deck = Deck()
+            new_deck.shuffle()
+            hand = Hand(new_deck)
+
+            if hand.is_straight() or hand.is_flush():
+                hand.print_canvas(self.canvas)
+                break
+        self.label.config(text=hand.rank_hand())
+
+    @staticmethod
+    def exit_game():
+        exit(0)
+
+
+# Creating a Window
+window = Tk()
+poker_game = GUI(window)
+window.mainloop()

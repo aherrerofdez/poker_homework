@@ -2,7 +2,7 @@ import random
 from tkinter import *
 from PIL import ImageTk, Image  # used to load a JPG file
 
-suits = ["S", "H", "D", "C"]
+suits = ["S", "H", "D", "C"]  
 ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 
